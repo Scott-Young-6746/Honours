@@ -1,0 +1,96 @@
+<?xml version="1.0"?>
+<project xmlns:ivy="antlib:org.apache.ivy.ant"
+    name="jocl" default="help" basedir=".">
+
+    <target name="help">
+        <echo message="ant help -- print this message"/>
+        <echo message="ant compile -- compiles the source"/>
+        <echo message="ant clean -- removes classes"/>
+    </target>
+
+    <property name="dest.dir" value="./classes" />
+    <property name="lib.dir" value="./lib" />
+
+    <path id="lib-jars">
+        <fileset dir="${lib.dir}/default" />
+    </path>
+
+    <target name="init">
+        <mkdir dir="${dest.dir}"/>
+        <mkdir dir="${lib.dir}"/>
+    </target>
+
+    <target name="resolve" depends="init" description="retreive dependencies with ivy">
+        <mkdir dir="${lib.dir}"/>
+        <ivy:retrieve
+            pattern="${lib.dir}/[conf]/[artifact].[ext]"
+            conf="default" log="quiet"/>
+    </target>
+
+    <target name="compile" depends="resolve">
+        <javac
+            includeantruntime="false"
+            srcdir="src" destdir="${dest.dir}">
+
+            <include name="**/*.java"/>
+            <classpath>
+                <path refid="lib-jars"/>
+            </classpath>
+        </javac>
+    </target>
+
+    <target name="add" depends="compile">
+        <java classname="JavaCLTutorial1" fork="true">
+            <arg value="1000000"/>
+            <classpath>
+                <pathelement path="${dest.dir}"/>
+                <path refid="lib-jars"/>
+            </classpath>
+        </java>
+    </target>
+
+    <target name="test" depends="compile">
+        <java classname="Test" fork="true">
+            <arg value="1000000"/>
+            <classpath>
+                <pathelement path="${dest.dir}"/>
+                <path refid="lib-jars"/>
+            </classpath>
+        </java>
+    </target>
+	
+	<target name="test2" depends="compile">
+        <java classname="Test2" fork="true">
+            <arg value="1000000"/>
+            <classpath>
+                <pathelement path="${dest.dir}"/>
+                <path refid="lib-jars"/>
+            </classpath>
+        </java>
+    </target>
+
+	<target name="testc" depends="compile">
+        <java classname="CirclesTest" fork="true">
+            <classpath>
+                <pathelement path="${dest.dir}"/>
+                <path refid="lib-jars"/>
+            </classpath>
+        </java>
+    </target>
+    
+    <target name="testg" depends="compile">
+        <java classname="CirclesGrid" fork="true">
+            <classpath>
+                <pathelement path="${dest.dir}"/>
+                <path refid="lib-jars"/>
+            </classpath>
+        </java>
+    </target>
+	
+    <target name="clean">
+        <delete  includeemptydirs="true">
+            <fileset dir="classes" includes="**/*"/>
+        </delete>
+    </target>
+
+</project>

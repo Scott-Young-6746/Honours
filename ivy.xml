@@ -1,0 +1,14 @@
+<ivy-module version="2.0">
+    <info organisation="ca.mun.cs" module="jetty-demo-ivy"/>
+    <configurations>
+        <conf name="default" description="the defaults"/>
+    </configurations>
+    <dependencies>
+        <dependency
+            org="com.nativelibs4java"
+            name="javacl" rev="1.0.0-RC3" conf="default"/>
+        <dependency
+            org="com.nativelibs4java"
+            name="bridj" rev="0.6.2" conf="default"/>
+    </dependencies>
+</ivy-module>
